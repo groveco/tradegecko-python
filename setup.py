@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 
 setup(
     name = "tradegecko-python",
-    version = __version__,
+    version = '0.0.1',
     description = "Python wrapper for TradeGecko REST API",
     author = "drew kowalik",
     author_email = "drew.kowalik@gmail.com",
@@ -12,4 +12,4 @@ setup(
     install_requires = ['requests==2.3.0'],
     packages = find_packages(),
     include_package_data=True,
-)
+    )
