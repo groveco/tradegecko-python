@@ -19,8 +19,8 @@ class TradeGeckoRestClient(object):
         else:
             self.app_id = app_id
             self.app_secret = app_secret
-            self.access_token = access_token
-            self.refresh_token = refresh_token
+        self.access_token = access_token
+        self.refresh_token = refresh_token
 
         if not self.app_id or not self.app_secret or not self.access_token:
             #TODO create specific exception
