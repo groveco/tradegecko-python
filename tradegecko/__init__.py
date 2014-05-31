@@ -3,7 +3,7 @@ import json
 
 from company import Company
 
-from helper import send_request
+from helper import send_request, generate_data
 
 
 def find_credentials():
@@ -27,15 +27,14 @@ class TradeGeckoRestClient(object):
         self.redirect_uri = os.environ['TRADEGECKO_REDIRECT']
         self.base_data = {} # built in _setup_base_data
 
-        # Endpoints
-        self.company = Company()
-
         if not app_id or app_secret:
             self.app_id, self.app_secret = find_credentials()
 
         self._test_credentials()
         self._setup_base_data()
 
+        # Endpoints
+        self.company = Company(self.base_data, self.access_token)
 
     def _test_credentials(self):
         if not self.app_id or not self.app_secret or not self.access_token:
@@ -63,6 +62,7 @@ class TradeGeckoRestClient(object):
             'refresh_token': self.refresh_token,
             'grant_type': 'refresh_token'
         }
+        data = generate_data(self.base_data, data)
 
         rsp = send_request('POST', uri, data)
 

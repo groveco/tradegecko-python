@@ -1,11 +1,7 @@
-from helper import send_request
+from helper import ApiEndpoint
 
 
-class Company(object):
-    def __init__(self):
-        self.uri = 'companies/'
-
-    def get(self):
-        return send_request('GET', self.uri)
-
-
+class Company(ApiEndpoint):
+    def __init__(self, base_data, access_token):
+        super(Company, self).__init__(base_data, access_token)
+        self.uri = self.base_uri + 'companies/'
