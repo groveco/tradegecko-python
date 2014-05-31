@@ -1,6 +1,9 @@
 import os
-import requests
 import json
+
+from company import Company
+
+from helper import send_request
 
 
 def find_credentials():
@@ -15,23 +18,32 @@ def find_credentials():
 class TradeGeckoRestClient(object):
 
     def __init__(self, app_id=None, app_secret=None, access_token=None, refresh_token=None):
+        self.app_id = app_id
+        self.app_secret = app_secret
+        self.refresh_token = refresh_token
+        self.access_token = access_token
+        # TODO setup env var
+        self.base_uri = 'https://api.tradegecko.com/'
+        self.redirect_uri = os.environ['TRADEGECKO_REDIRECT']
+        self.base_data = {} # built in _setup_base_data
+
+        # Endpoints
+        self.company = Company()
+
         if not app_id or app_secret:
             self.app_id, self.app_secret = find_credentials()
-        else:
-            self.app_id = app_id
-            self.app_secret = app_secret
-        self.access_token = access_token
-        self.refresh_token = refresh_token
 
+        self._test_credentials()
+        self._setup_base_data()
+
+
+    def _test_credentials(self):
         if not self.app_id or not self.app_secret or not self.access_token:
             #TODO create specific exception
             #TODO refactor
             raise Exception("Auth Error")
 
-        self.base_uri = 'https://api.tradegecko.com/'
-        ##TODO env var
-        self.redirect_uri = os.environ['TRADEGECKO_REDIRECT']
-
+    def _setup_base_data(self):
         self.base_data = {
             'client_id': self.app_id,
             'client_secret': self.app_secret,
@@ -41,11 +53,6 @@ class TradeGeckoRestClient(object):
     def generate_data(self, data):
         #merge dictionary and return json
         return json.dumps(dict(self.base_data.items() + data.items()))
-
-    def send_request(self, method, uri, data):
-        data = self.generate_data(data)
-        headers = {'content-type': 'application/json'}
-        return requests.request(method, uri, data=data, headers=headers)
 
     def get_refresh_token(self):
         if not self.refresh_token:
@@ -57,7 +64,7 @@ class TradeGeckoRestClient(object):
             'grant_type': 'refresh_token'
         }
 
-        rsp = self.send_request('POST', uri, data)
+        rsp = send_request('POST', uri, data)
 
         if rsp.status_code == 200:
             rsp_data = rsp.json()
