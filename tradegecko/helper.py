@@ -22,6 +22,7 @@ class ApiEndpoint(object):
             'content-type': 'application/json'
         }
         self.rsp = None
+        self.json = None
         self.base_uri = 'https://api.tradegecko.com/'
         self.uri = None
 
@@ -32,10 +33,20 @@ class ApiEndpoint(object):
         except AttributeError:
             return self.header
 
-    def send_request(self, method, uri, data=None, header=None):
+    def _send_request(self, method, uri, data=None, header=None):
         headers = self._build_header(header)
         self.rsp = requests.request(method, uri, data=data, headers=headers)
         return self.rsp.status_code
 
-    def get(self):
-        return self.send_request('GET', self.uri)
+    def all(self):
+        if self._send_request('GET', self.uri) == 200:
+            return self.rsp.json()
+        else:
+            return False
+
+    def get(self, id):
+        uri = self.uri + str(id)
+        if self._send_request('GET', uri) == 200:
+            return self.rsp.json()
+        else:
+            return False
