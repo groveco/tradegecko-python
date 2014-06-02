@@ -25,6 +25,13 @@ class ApiEndpoint(object):
         self.json = None
         self.base_uri = 'https://api.tradegecko.com/'
         self.uri = None
+        self.required_fields = []
+
+    def _validate_post_data(self, data):
+        for k in self.require_fields:
+            if k not in data.keys():
+                return False
+        return True
 
     def _build_header(self, header):
         try:
@@ -38,15 +45,39 @@ class ApiEndpoint(object):
         self.rsp = requests.request(method, uri, data=data, headers=headers)
         return self.rsp.status_code
 
+    # all records
     def all(self):
         if self._send_request('GET', self.uri) == 200:
             return self.rsp.json()
         else:
             return False
 
-    def get(self, id):
-        uri = self.uri + str(id)
+    # retrieve a specific record
+    def get(self, pk):
+        uri = self.uri + str(pk)
         if self._send_request('GET', uri) == 200:
+            return self.rsp.json()
+        else:
+            return False
+
+    # delete a specific record
+    def delete(self, pk):
+        uri = self.uri + str(pk)
+        if self._send_request('DELETE', uri) == 204:
+            return self.rsp.json()
+        else:
+            return False
+
+    # create a new record
+    def post(self, data):
+        if self._send_request('POST', self.uri, data=data) == 201:
+            return self.rsp.json()
+        else:
+            return False
+
+    # update a specific record
+    def update(self, data):
+        if self._send_request('PUT', self.uri, data=data) == 204:
             return self.rsp.json()
         else:
             return False
