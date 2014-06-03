@@ -14,9 +14,9 @@ class ApiEndpoint(object):
         self.rsp = None
         self.json = None
         self.base_uri = 'https://api.tradegecko.com/'
-        self.uri = None
+        self.uri = ''
         self.required_fields = []
-        self.data_name = ''
+        self._data_name = ''
 
     def _validate_post_data(self, data):
         for k in self.required_fields:
@@ -29,7 +29,7 @@ class ApiEndpoint(object):
         return self.rsp.status_code
 
     def _build_data(self, data):
-        return json.dumps({self.data_name: data})
+        return json.dumps({self._data_name: data})
 
     # all records
     def all(self):
