@@ -1,4 +1,6 @@
-#Python wrapper for TradeGecko
+##Python wrapper for TradeGecko
+
+.. image:: https://travis-ci.org/epantry/tradegecko-python.png?branch=master
 
 
 ###TODO
