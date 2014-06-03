@@ -5,5 +5,5 @@ install:
   - pip install -r requirements.txt
   - pip install -r tests/requirements.txt
 script:
-  - flake8 tradegecko
+  - flake8
   - nosetests
