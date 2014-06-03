@@ -6,8 +6,6 @@ from mock import patch, Mock
 from tradegecko.api import ApiEndpoint
 
 
-
-
 access_token = 'access_token'
 base_data = {
     'client_id': 'app_id',
