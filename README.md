@@ -1,7 +1,6 @@
 #Python wrapper for TradeGecko
 
 
-##Thoughts
+###TODO
 
-- Token store in env-var. Will only be able to have max 1 worker because of refresh tokens. fucking oauth2.
-- 
+* Refactor API code to eliminate post & update overrides. Should be able to identify calling class in parent constructor.

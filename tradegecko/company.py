@@ -1,4 +1,4 @@
-from helper import ApiEndpoint
+from api import ApiEndpoint
 
 
 class Company(ApiEndpoint):
@@ -7,17 +7,18 @@ class Company(ApiEndpoint):
         self.uri = self.base_uri + 'companies/'
         self.required_fields = ['name', 'company_type']
         # TODO populate with available fields for validation
+        self.data_name = 'company'
         self.field = []
 
-    def post(self, data):
-        if self._validate_post_data(data):
-            data = {'company': data}
-            return super(Company, self).post(data)
-        return False
 
-    def update(self, pk, data):
-        data = {'company': data}
-        return super(Company, self).update(pk, data)
+class Address(ApiEndpoint):
+    def __init__(self, base_data, access_token):
+        super(Address, self).__init__(base_data, access_token)
+        self.uri = self.base_uri + 'addresses/'
+        self.required_fields = ['company_id', 'label']
+        self.data_name = 'address'
+        # TODO populate with available fields for validation
+        self.field = []
 
 
 
