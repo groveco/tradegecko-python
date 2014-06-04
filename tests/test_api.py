@@ -113,7 +113,7 @@ def test_create_request_success(mock_data, mock_request):
     json_data = json.dumps(data)
     mock_request.return_value = 201
     mock_data.return_value = json_data
-    function_return = api.post(data)
+    function_return = api.create(data)
 
     assert_equal(function_return, data) # Dict on success
 
@@ -125,7 +125,7 @@ def test_create_request_success(mock_data, mock_request):
     json_data = json.dumps(data)
     mock_request.return_value = 400
     mock_data.return_value = json_data
-    function_return = api.post(data)
+    function_return = api.create(data)
 
     assert_false(function_return) # False on failure
 

@@ -55,7 +55,7 @@ class ApiEndpoint(object):
             return False
 
     # create a new record
-    def post(self, data):
+    def create(self, data):
         data = self._build_data(data)
 
         if self._send_request('POST', self.uri, data=data) == 201:
