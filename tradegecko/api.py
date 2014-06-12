@@ -24,16 +24,17 @@ class ApiEndpoint(object):
                 return False
         return True
 
-    def _send_request(self, method, uri, data=None):
-        self.rsp = requests.request(method, uri, data=data, headers=self.header)
+    def _send_request(self, method, uri, data=None, params=None):
+        self.rsp = requests.request(method, uri, data=data, headers=self.header, params=params)
         return self.rsp.status_code
 
     def _build_data(self, data):
         return json.dumps({self._data_name: data})
 
     # all records
-    def all(self):
-        if self._send_request('GET', self.uri) == 200:
+    def all(self, page=1):
+        params = {'page': page}
+        if self._send_request('GET', self.uri, params=params) == 200:
             return self.rsp.json()
         else:
             return False
