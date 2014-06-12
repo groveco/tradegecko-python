@@ -1,7 +1,7 @@
 import os
 import json
 
-from endpoints import Company, Address, Variant
+from endpoints import Company, Address, Variant, Product
 
 from helper import send_request, generate_data
 
@@ -37,6 +37,7 @@ class TradeGeckoRestClient(object):
         self.company = Company(self.base_data, self.access_token)
         self.address = Address(self.base_data, self.access_token)
         self.variant = Variant(self.base_data, self.access_token)
+        self.product = Product(self.base_data, self.access_token)
 
     def _test_credentials(self):
         if not self.app_id or not self.app_secret or not self.access_token:

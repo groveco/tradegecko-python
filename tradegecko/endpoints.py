@@ -31,3 +31,11 @@ class Variant(ApiEndpoint):
         self.uri = self.base_uri + 'variants/'
         self.required_fields = []
         self._data_name = 'variants'
+
+
+class Product(ApiEndpoint):
+    def __init__(self, base_data, access_token):
+        super(Product, self).__init__(base_data, access_token)
+        self.uri = self.base_uri + 'products/'
+        self.required_fields = []
+        self._data_name = 'products'
