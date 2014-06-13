@@ -64,7 +64,7 @@ class ApiEndpoint(object):
         data = self._build_data(data)
 
         if self._send_request('POST', self.uri, data=data) == 201:
-            return True, self.rsp.json()[self._data_name]['id']
+            return self.rsp.json()[self._data_name]['id']
         else:
             raise TGRequestFailure("Creation Failed")
 
