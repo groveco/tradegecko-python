@@ -1,5 +1,6 @@
 import requests
 import json
+from . import TGRequestFailure
 
 
 class ApiEndpoint(object):
@@ -60,9 +61,9 @@ class ApiEndpoint(object):
         data = self._build_data(data)
 
         if self._send_request('POST', self.uri, data=data) == 201:
-            return self.rsp.json()[self._data_name]['id']
+            return True, self.rsp.json()[self._data_name]['id']
         else:
-            return False
+            raise TGRequestFailure("Creation Failed")
 
     # update a specific record
     def update(self, pk, data):
@@ -72,4 +73,4 @@ class ApiEndpoint(object):
         if self._send_request('PUT', uri, data=data) == 204:
             return self.rsp
         else:
-            return False
+            raise TGRequestFailure("Update Failed")
