@@ -6,10 +6,6 @@ from endpoints import Company, Address, Variant, Product
 from helper import send_request, generate_data
 
 
-class TGRequestFailure(Exception):
-    pass
-
-
 def find_credentials():
     try:
         app_id = os.environ["TRADEGECKO_APP_ID"]

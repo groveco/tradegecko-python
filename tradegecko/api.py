@@ -1,6 +1,9 @@
 import requests
 import json
-from . import TGRequestFailure
+
+
+class TGRequestFailure(Exception):
+    pass
 
 
 class ApiEndpoint(object):
