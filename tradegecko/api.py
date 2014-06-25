@@ -74,6 +74,6 @@ class ApiEndpoint(object):
         data = self._build_data(data)
 
         if self._send_request('PUT', uri, data=data) == 204:
-            return self.rsp
+            return True
         else:
             raise TGRequestFailure("Update Failed")
