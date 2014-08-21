@@ -1,5 +1,6 @@
 import requests
 import json
+import time
 
 
 class TGRequestFailure(Exception):
@@ -29,7 +30,15 @@ class ApiEndpoint(object):
         return True
 
     def _send_request(self, method, uri, data=None, params=None):
-        self.rsp = requests.request(method, uri, data=data, headers=self.header, params=params)
+        # wait at most 3 minutes in case of 429 code
+        fails = 0
+        while fails < 9:
+            self.rsp = requests.request(method, uri, data=data, headers=self.header, params=params)
+            if self.rsp.status_code == 429:
+                fails += 1
+                time.sleep(20)
+            else:
+                break
         return self.rsp.status_code
 
     def _build_data(self, data):
