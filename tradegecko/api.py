@@ -1,6 +1,7 @@
 import requests
 import json
 import time
+import math
 
 
 class TGRequestFailure(Exception):
@@ -93,3 +94,8 @@ class ApiEndpoint(object):
             return True
         else:
             raise TGRequestFailure("Update Failed")
+
+    def page_count(self, limit=100):
+        tg_items = self.filter(page='1', limit='1')
+        return int(math.ceil(tg_items['meta']['total'] / float(limit)))
+
