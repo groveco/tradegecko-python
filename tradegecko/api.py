@@ -60,6 +60,13 @@ class ApiEndpoint(object):
         else:
             return False
 
+    # records filtered by field value
+    def filter(self, **kwargs):
+        if self._send_request('GET', self.uri, params=kwargs) == 200:
+            return self.rsp.json()
+        else:
+            return False
+
     # delete a specific record
     def delete(self, pk):
         uri = self.uri + str(pk)
