@@ -1,5 +1,7 @@
 import requests
 import json
+import time
+import math
 
 
 class TGRequestFailure(Exception):
@@ -28,8 +30,17 @@ class ApiEndpoint(object):
                 return False
         return True
 
+
     def _send_request(self, method, uri, data=None, params=None):
-        self.rsp = requests.request(method, uri, data=data, headers=self.header, params=params)
+        fails = 0
+        while fails < 2:
+            self.rsp = requests.request(method, uri, data=data, headers=self.header, params=params)
+            if self.rsp.status_code == 429:
+                retry_after = int(self.rsp.headers.get('retry-after', 10))
+                time.sleep(retry_after)
+                fails += 1
+            else:
+                break
         return self.rsp.status_code
 
     def _build_data(self, data):
@@ -47,6 +58,13 @@ class ApiEndpoint(object):
     def get(self, pk):
         uri = self.uri + str(pk)
         if self._send_request('GET', uri) == 200:
+            return self.rsp.json()
+        else:
+            return False
+
+    # records filtered by field value
+    def filter(self, **kwargs):
+        if self._send_request('GET', self.uri, params=kwargs) == 200:
             return self.rsp.json()
         else:
             return False
@@ -77,3 +95,8 @@ class ApiEndpoint(object):
             return True
         else:
             raise TGRequestFailure("Update Failed")
+
+    def page_count(self, limit=100):
+        tg_items = self.filter(page='1', limit='1')
+        return int(math.ceil(tg_items['meta']['total'] / float(limit)))
+
