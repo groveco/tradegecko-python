@@ -30,14 +30,15 @@ class ApiEndpoint(object):
                 return False
         return True
 
+
     def _send_request(self, method, uri, data=None, params=None):
-        # wait at most 3 minutes in case of 429 code
         fails = 0
-        while fails < 9:
+        while fails < 2:
             self.rsp = requests.request(method, uri, data=data, headers=self.header, params=params)
             if self.rsp.status_code == 429:
+                retry_after = int(self.rsp.headers.get('retry-after', 10))
+                time.sleep(retry_after)
                 fails += 1
-                time.sleep(20)
             else:
                 break
         return self.rsp.status_code
