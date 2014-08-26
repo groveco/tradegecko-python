@@ -1,7 +1,10 @@
+import logging
 import requests
 import json
 import time
 import math
+
+logger = logging.getLogger(__name__)
 
 
 class TGRequestFailure(Exception):
@@ -35,6 +38,7 @@ class ApiEndpoint(object):
         fails = 0
         while fails < 2:
             self.rsp = requests.request(method, uri, data=data, headers=self.header, params=params)
+            logger.info('TRADEGECKO API REQUEST: %s %s DATA="%s" STATUS_CODE: %s' % (method, uri, data, self.rsp.status_code))
             if self.rsp.status_code == 429:
                 retry_after = int(self.rsp.headers.get('retry-after', 10))
                 time.sleep(retry_after)
