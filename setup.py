@@ -2,13 +2,13 @@ from setuptools import setup, find_packages
 
 
 setup(
-    name = "tradegecko-python",
+    name = 'tradegecko-python',
     version = '0.0.1',
-    description = "Python wrapper for TradeGecko REST API",
-    author = "drew kowalik",
-    author_email = "dk@epantry.com",
-    url = "https://github.com/epantry/tradegecko-python",
-    keywords = ["tradegecko"],
+    description = 'Python wrapper for TradeGecko REST API',
+    author = 'Drew Kowalik',
+    author_email = 'dk@epantry.com',
+    url = 'https://github.com/epantry/tradegecko-python',
+    keywords = ['tradegecko'],
     install_requires = ['requests==2.3.0'],
     packages = find_packages(),
     include_package_data=True,
