@@ -12,10 +12,13 @@ Python wrapper for TradeGecko API.
 **How to use **
 
 Initialize client
+
 ``tg = TradeGeckoRestClient(access_token, refresh_token)``
 
 Create company
+
 ``tg.company.create(**company_data)``
 
 Update company
+
 ``tg.company.create(company_id, **company_data)``
