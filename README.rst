@@ -1,4 +1,4 @@
-..image:: https://travis-ci.org/epantry/tradegecko-python.png?branch=master
+.. image:: https://travis-ci.org/epantry/tradegecko-python.png?branch=master
 
 
 Python wrapper for TradeGecko API.
@@ -9,7 +9,7 @@ Python wrapper for TradeGecko API.
 ``pip install tradegecko-python``
 
 
-**How to use **
+**How to use**
 
 Initialize client
 
