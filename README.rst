@@ -21,4 +21,4 @@ Create company
 
 Update company
 
-``tg.company.create(company_id, **company_data)``
+``tg.company.update(company_id, **company_data)``
