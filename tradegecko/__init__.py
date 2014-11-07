@@ -4,7 +4,7 @@ import json
 from endpoints import Company, Address, Variant, Product, Order
 
 from helper import send_request, generate_data
-
+import logging
 logger = logging.getLogger(__name__)
 
 
