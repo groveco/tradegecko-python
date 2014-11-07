@@ -59,22 +59,41 @@ class TradeGeckoRestClient(object):
         #merge dictionary and return json
         return json.dumps(dict(self.base_data.items() + data.items()))
 
-    def get_refresh_token(self):
-        if not self.refresh_token:
-            raise Exception("Missing refresh token")
+    def _get_tokens(self, grant_type, auth_type, auth):
+        """
+        For code-based auth (a way of getting an initial set of token + refresh) use:
+            grant_type="authorization_code"
+            auth_type="code"
+            auth=<your authorization code>
+        You can get an auth code for your app from https://go.tradegecko.com/oauth/applications
+
+        For getting a new token via a refresh token, use:
+            grant_type="refresh_token"
+            auth_type="refresh_token"
+            auth=self.refresh_token
+        """
+        if not grant_type or not auth or not auth_type:
+            raise Exception("Missing authenticatino parameters. See _get_tokens docstring for more info.")
 
         uri = self.base_uri + 'oauth/token'
         data = {
-            'refresh_token': self.refresh_token,
-            'grant_type': 'refresh_token'
+            auth_type: auth,
+            'grant_type': grant_type
         }
         data = generate_data(self.base_data, data)
 
         rsp = send_request('POST', uri, data)
 
         if rsp.status_code == 200:
+            logger.info('TRADEGECKO AUTH REQUEST: POST %s \nDATA="%s" \nRESPONSE="%s" \nSTATUS_CODE: %s' % (uri, data, rsp.content, rsp.status_code))
             rsp_data = rsp.json()
             return rsp_data['access_token'], rsp_data['refresh_token']
         else:
-            logger.info('TRADEGECKO TOKEN REQUEST: POST %s \nDATA="%s" \nRESPONSE="%s" \nSTATUS_CODE: %s' % (uri, data, rsp.content, rsp.status_code))
+            logger.info('TRADEGECKO AUTH REQUEST: POST %s \nDATA="%s" \nRESPONSE="%s" \nSTATUS_CODE: %s' % (uri, data, rsp.content, rsp.status_code))
             return False, False
+
+    def get_refresh_token(self):
+        return self._get_tokens('refresh_token', 'refresh_token', self.refresh_token)
+
+    def get_refresh_token_from_auth_code(self, code):
+        return self._get_tokens('authorization_code', 'code', code)
