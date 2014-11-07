@@ -5,6 +5,8 @@ from endpoints import Company, Address, Variant, Product, Order
 
 from helper import send_request, generate_data
 
+logger = logging.getLogger(__name__)
+
 
 def find_credentials():
     try:
@@ -74,4 +76,5 @@ class TradeGeckoRestClient(object):
             rsp_data = rsp.json()
             return rsp_data['access_token'], rsp_data['refresh_token']
         else:
+            logger.info('TRADEGECKO TOKEN REQUEST: POST %s \nDATA="%s" \nRESPONSE="%s" \nSTATUS_CODE: %s' % (uri, data, rsp.content, rsp.status_code))
             return False, False
