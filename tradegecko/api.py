@@ -11,6 +11,14 @@ class TGRequestFailure(Exception):
     pass
 
 
+class TGAuthFailure(TGRequestFailure):
+    pass
+
+
+class TGRateLimitFailure(TGRequestFailure):
+    pass
+
+
 class ApiEndpoint(object):
 
     def __init__(self, base_data, access_token):
@@ -35,16 +43,12 @@ class ApiEndpoint(object):
 
 
     def _send_request(self, method, uri, data=None, params=None):
-        fails = 0
-        while fails < 2:
-            self.rsp = requests.request(method, uri, data=data, headers=self.header, params=params)
-            logger.info('TRADEGECKO API REQUEST: %s %s \nDATA="%s" \nPARAMS="%s" \nRESPONSE="%s" \nSTATUS_CODE: %s' % (method, uri, data, params, self.rsp.content, self.rsp.status_code))
-            if self.rsp.status_code == 429:
-                retry_after = int(self.rsp.headers.get('retry-after', 10))
-                time.sleep(retry_after)
-                fails += 1
-            else:
-                break
+        self.rsp = requests.request(method, uri, data=data, headers=self.header, params=params)
+        logger.info('TRADEGECKO API REQUEST: %s %s \nDATA="%s" \nPARAMS="%s" \nRESPONSE="%s" \nSTATUS_CODE: %s' % (method, uri, data, params, self.rsp.content, self.rsp.status_code))
+        if self.rsp.status_code == 429:
+            raise TGRateLimitFailure
+        if self.rsp.status_code == 401:
+            raise TGAuthFailure
         return self.rsp.status_code
 
     def _build_data(self, data):
