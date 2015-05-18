@@ -15,6 +15,10 @@ class TGAuthFailure(TGRequestFailure):
     pass
 
 
+class TGUnprocessableEntityFailure(TGRequestFailure):
+    pass
+
+
 class TGRateLimitFailure(TGRequestFailure):
     pass
 
@@ -45,10 +49,12 @@ class ApiEndpoint(object):
     def _send_request(self, method, uri, data=None, params=None):
         self.rsp = requests.request(method, uri, data=data, headers=self.header, params=params)
         logger.info('TRADEGECKO API REQUEST: %s %s \nDATA="%s" \nPARAMS="%s" \nRESPONSE="%s" \nSTATUS_CODE: %s' % (method, uri, data, params, self.rsp.content, self.rsp.status_code))
-        if self.rsp.status_code == 429:
-            raise TGRateLimitFailure
         if self.rsp.status_code == 401:
             raise TGAuthFailure
+        if self.rsp.status_code == 422:
+            raise TGUnprocessableEntityFailure
+        if self.rsp.status_code == 429:
+            raise TGRateLimitFailure
         return self.rsp.status_code
 
     def _build_data(self, data):
