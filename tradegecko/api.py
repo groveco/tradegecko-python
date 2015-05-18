@@ -52,7 +52,7 @@ class ApiEndpoint(object):
         if self.rsp.status_code == 401:
             raise TGAuthFailure
         if self.rsp.status_code == 422:
-            raise TGUnprocessableEntityFailure
+            raise TGUnprocessableEntityFailure(self.rsp.content)
         if self.rsp.status_code == 429:
             raise TGRateLimitFailure
         return self.rsp.status_code
