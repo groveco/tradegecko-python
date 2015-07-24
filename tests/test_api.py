@@ -8,6 +8,7 @@ from tradegecko.api import ApiEndpoint, TGRequestFailure
 
 access_token = 'access_token'
 api = ApiEndpoint('', access_token)
+api.uri = 'foo/%s'
 api.rsp = Mock()
 
 
