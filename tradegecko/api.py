@@ -1,7 +1,6 @@
 import logging
 import requests
 import json
-import time
 import math
 
 logger = logging.getLogger(__name__)
@@ -25,8 +24,7 @@ class TGRateLimitFailure(TGRequestFailure):
 
 class ApiEndpoint(object):
 
-    def __init__(self, base_data, access_token):
-        self.base_data = base_data
+    def __init__(self, base_uri, access_token):
         self.access_token = access_token
         self.header = {
             'Authorization': 'Bearer ' + self.access_token,
@@ -34,17 +32,10 @@ class ApiEndpoint(object):
         }
         self.rsp = None
         self.json = None
-        self.base_uri = 'https://api.tradegecko.com/'
+        self.base_uri = base_uri
         self.uri = ''
         self.required_fields = []
         self._data_name = ''
-
-    def _validate_post_data(self, data):
-        for k in self.required_fields:
-            if k not in data.keys():
-                return False
-        return True
-
 
     def _send_request(self, method, uri, data=None, params=None):
         self.rsp = requests.request(method, uri, data=data, headers=self.header, params=params)

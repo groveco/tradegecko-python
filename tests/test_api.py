@@ -16,19 +16,25 @@ base_data = {
 api = ApiEndpoint(base_data, access_token)
 api.rsp = Mock()
 
+def _validate_post_data(endpoint, data):
+    for k in endpoint.required_fields:
+        if k not in data.keys():
+            return False
+    return True
+
 
 def test_validate_post_data_correct_fields():
     api.required_fields = ['field1', 'field2']
     data = {'field1': 'foo', 'field2': 'bar'}
 
-    assert_true(api._validate_post_data(data))
+    assert_true(_validate_post_data(api, data))
 
 
 def test_validate_post_data_incorrect_fields():
     api.required_fields = ['field1', 'field3']
     data = {'field1': 'foo', 'field2': 'bar'}
 
-    assert_false(api._validate_post_data(data))
+    assert_false(_validate_post_data(api, data))
 
 
 def test_build_data_returns_json():
