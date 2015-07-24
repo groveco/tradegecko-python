@@ -53,15 +53,16 @@ class ApiEndpoint(object):
 
     # all records
     def all(self, page=1):
+        uri = self.uri % ''
         params = {'page': page}
-        if self._send_request('GET', self.uri, params=params) == 200:
+        if self._send_request('GET', uri, params=params) == 200:
             return self.rsp.json()
         else:
             return False
 
     # retrieve a specific record
     def get(self, pk):
-        uri = self.uri + str(pk)
+        uri = self.uri % str(pk)
         if self._send_request('GET', uri) == 200:
             return self.rsp.json()
         else:
@@ -69,14 +70,15 @@ class ApiEndpoint(object):
 
     # records filtered by field value
     def filter(self, **kwargs):
-        if self._send_request('GET', self.uri, params=kwargs) == 200:
+        uri = self.uri % ''
+        if self._send_request('GET', uri, params=kwargs) == 200:
             return self.rsp.json()
         else:
             return False
 
     # delete a specific record
     def delete(self, pk):
-        uri = self.uri + str(pk)
+        uri = self.uri % str(pk)
         if self._send_request('DELETE', uri) == 204:
             return self.rsp
         else:
@@ -84,16 +86,17 @@ class ApiEndpoint(object):
 
     # create a new record
     def create(self, data):
+        uri = self.uri % ''
         data = self._build_data(data)
 
-        if self._send_request('POST', self.uri, data=data) == 201:
+        if self._send_request('POST', uri, data=data) == 201:
             return self.rsp.json()[self._data_name]['id']
         else:
             raise TGRequestFailure("Creation Failed")
 
     # update a specific record
     def update(self, pk, data):
-        uri = self.uri + str(pk)
+        uri = self.uri % str(pk)
         data = self._build_data(data)
 
         if self._send_request('PUT', uri, data=data) == 204:

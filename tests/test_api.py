@@ -7,14 +7,9 @@ from tradegecko.api import ApiEndpoint, TGRequestFailure
 
 
 access_token = 'access_token'
-base_data = {
-    'client_id': 'app_id',
-    'client_secret': 'app_secret',
-    'redirect_uri': 'redirect_uri'
-}
-
-api = ApiEndpoint(base_data, access_token)
+api = ApiEndpoint('', access_token)
 api.rsp = Mock()
+
 
 def _validate_post_data(endpoint, data):
     for k in endpoint.required_fields:
