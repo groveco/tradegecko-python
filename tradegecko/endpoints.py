@@ -4,7 +4,7 @@ from api import ApiEndpoint
 class Composition(ApiEndpoint):
     def __init__(self, base_uri, access_token):
         super(Composition, self).__init__(base_uri, access_token)
-        self.url = self.base_uri + 'variants/%s/composition'
+        self.uri = self.base_uri + 'variants/%s/composition'
         self._data_name = 'variants'
 
 
