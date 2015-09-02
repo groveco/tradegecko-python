@@ -24,6 +24,14 @@ class Address(ApiEndpoint):
         self._data_name = 'address'
 
 
+class Location(ApiEndpoint):
+    def __init__(self, base_data, access_token):
+        super(Location, self).__init__(base_data, access_token)
+        self.uri = self.base_uri + 'locations/%s'
+        self.required_fields = ['label']
+        self._data_name = 'location'
+
+
 class PurchaseOrder(ApiEndpoint):
     def __init__(self, base_uri, access_token):
         super(PurchaseOrder, self).__init__(base_uri, access_token)
