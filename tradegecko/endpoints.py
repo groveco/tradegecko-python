@@ -36,9 +36,8 @@ class PurchaseOrder(ApiEndpoint):
     def __init__(self, base_uri, access_token):
         super(PurchaseOrder, self).__init__(base_uri, access_token)
         self.uri = self.base_uri + 'purchase_orders/%s'
-        self.required_fields = ['company_id']
-        self.required_fields = ['stock_location_id']
-        self._data_name = 'purchase_orders'
+        self.required_fields = ['company_id', 'stock_location_id']
+        self._data_name = 'purchase_order'
 
 
 class Variant(ApiEndpoint):
