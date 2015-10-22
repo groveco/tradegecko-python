@@ -1,6 +1,6 @@
 import os
 
-from endpoints import Company, Address, Variant, Product, Order, Composition, Location
+from endpoints import Company, Address, Variant, Product, Order, Composition, Location, PurchaseOrder
 
 import logging
 logger = logging.getLogger(__name__)
@@ -22,4 +22,5 @@ class TradeGeckoRestClient(object):
         self.variant = Variant(self.base_uri, self.access_token)
         self.product = Product(self.base_uri, self.access_token)
         self.order = Order(self.base_uri, self.access_token)
+        self.purchase_order = PurchaseOrder(self.base_uri, self.access_token)
         self.composition = Composition(self.base_uri, self.access_token)
