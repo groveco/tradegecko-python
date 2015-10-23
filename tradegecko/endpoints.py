@@ -40,6 +40,14 @@ class PurchaseOrder(ApiEndpoint):
         self._data_name = 'purchase_order'
 
 
+class PurchaseOrderLineItem(ApiEndpoint):
+    def __init__(self, base_uri, access_token):
+        super(PurchaseOrderLineItem, self).__init__(base_uri, access_token)
+        self.uri = self.base_uri + 'purchase_order_line_items/%s'
+        self.required_fields = ['variant_id', 'quantity', 'price', 'purchase_order_id']
+        self._data_name = 'purchase_order_line_item'
+
+
 class Variant(ApiEndpoint):
     def __init__(self, base_uri, access_token):
         super(Variant, self).__init__(base_uri, access_token)
